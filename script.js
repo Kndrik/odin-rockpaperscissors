@@ -1,9 +1,3 @@
-const buttons = document.querySelectorAll("button");
-buttons.forEach(button => button.addEventListener('click',
-     () => playRound(button.className, getComputerChoice())));
-
-const result = document.querySelector('.results');
-
 function getComputerChoice() {
     let random = Math.random();
     if(random > .66) {
@@ -18,12 +12,27 @@ function getComputerChoice() {
 function playRound(playerSelection, computerSelection) {
     playerSelection = String(playerSelection).toLowerCase();
     playerSelection = String(playerSelection).charAt(0).toUpperCase() + String(playerSelection).substring(1);
-    if (playerSelection === computerSelection)
+    if (playerSelection === computerSelection) {
         result.textContent = "This round is a draw.";
-    else if (isWinner(playerSelection, computerSelection))
+    }
+    else if (isWinner(playerSelection, computerSelection)) {
         result.textContent = 'You Win! ' + playerSelection + ' beats ' + computerSelection;
-    else
-        result.textContent = 'You Lose! ' + computerSelection + ' beats ' + playerSelection;  
+        playerScore++;
+    }
+    else {
+        result.textContent = 'You Lose! ' + computerSelection + ' beats ' + playerSelection;
+        computerScore++;
+    }
+    updateScore();
+    checkForGameWinner();
+}
+
+function checkForGameWinner() {
+    if (playerScore >= 5) {
+        gameResult.textContent = 'You win the game!';
+    } else if (computerScore >= 5) {
+        gameResult.textContent = 'You lost the game';
+    }
 }
 
 function isWinner(playerSelection, computerSelection) {
@@ -50,3 +59,18 @@ function isWinner(playerSelection, computerSelection) {
         break;
     }
 }
+
+function updateScore() {
+    score.textContent = `${playerScore} - ${computerScore}`;
+}
+
+const buttons = document.querySelectorAll("button");
+buttons.forEach(button => button.addEventListener('click',
+     () => playRound(button.className, getComputerChoice())));
+
+const result = document.querySelector('.roundResult');
+const score = document.querySelector('.score');
+const gameResult = document.querySelector('.gameResult');
+
+let playerScore = 0;
+let computerScore = 0;
